@@ -288,4 +288,13 @@ def all_input(wildcards):
             )
         )
 
+    if config["genomebam"]["activate"]:
+        # kallisto genomebam
+        wanted_input.extend(
+            expand(
+                "results/kallisto/{sample}-{unit}/pseudoalignment.bam",
+
+            )
+        )
+        
     return wanted_input
