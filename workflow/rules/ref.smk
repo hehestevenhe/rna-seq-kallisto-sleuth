@@ -143,5 +143,5 @@ rule chrom_edit:
     log:
         "logs/chrom_edit.log",
     shell:
-        "sed 's/chr//' {input} > chrom_edit.txt 2> {log}"
+        "sed 's/chr//' {input} > resources/chrom_edit.txt 2> {log}"
 
