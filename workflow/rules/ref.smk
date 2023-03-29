@@ -1,4 +1,18 @@
 # TODO add ability to use gencode (more complete)
+rule get_genome:
+    output:
+        "resources/genome.fasta",
+    log:
+        "logs/get-genome.log",
+    params:
+        species=config["resources"]["ref"]["species"],
+        datatype="dna",
+        build=config["resources"]["ref"]["build"],
+        release=config["resources"]["ref"]["release"],
+    cache: True
+    wrapper:
+        "v1.21.4/bio/reference/ensembl-sequence"
+
 rule get_transcriptome:
     output:
         "resources/transcriptome.{type}.fasta",
