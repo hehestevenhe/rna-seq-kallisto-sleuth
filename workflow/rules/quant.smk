@@ -31,7 +31,7 @@ rule kallisto_genomebam:
     input:
         fq=get_trimmed,
         idx="results/kallisto/transcripts.idx",
-        gtf="resources/transcripts.gtf.gz",
+        gtf="resources/genome.gtf",
         chrom="resources/chrom_edit.txt",
     output:
         directory("results/kallisto/{sample}-{unit}"),
