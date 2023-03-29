@@ -133,7 +133,7 @@ rule get_chrom_size:
     log:
         "logs/chrom_size.log",
     shell:
-        "curl -o chrom.txt https://hgdownload.cse.ucsc.edu/goldenPath/{params.ver}/bigZips/{params.ver}.chrom.sizes 2> {log}"
+        "curl -o resources/chrom.txt https://hgdownload.cse.ucsc.edu/goldenPath/{params.ver}/bigZips/{params.ver}.chrom.sizes 2> {log}"
 
 rule chrom_edit:
     input:
