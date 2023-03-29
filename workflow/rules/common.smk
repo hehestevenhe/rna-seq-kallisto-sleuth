@@ -298,4 +298,14 @@ def all_input(wildcards):
             )
         )
         
+    if config["star"]["activate"]:
+        # star genome alignment
+        wanted_input.extend(
+            expand(
+                "results/star/indexed/{unit.sample}-{unit.unit}.bam.bai",
+                unit=units[["sample","unit"]].itertuples(),
+
+            )
+        )
+        
     return wanted_input
