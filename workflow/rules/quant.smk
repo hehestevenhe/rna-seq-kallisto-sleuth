@@ -37,7 +37,7 @@ rule kallisto_genomebam:
         chrom="resources/chrom_edit.txt",
     output:
         directory("results/kallisto/{sample}-{unit}"),
-        directory("results/kallisto/{sample}-{unit}/pseudoalignment.bam"),
+        "results/kallisto/{sample}-{unit}/pseudoalignment.bam",
     log:
         "results/logs/kallisto/genomebam/{sample}-{unit}.log",
     params:
