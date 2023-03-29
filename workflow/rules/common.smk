@@ -293,6 +293,7 @@ def all_input(wildcards):
         wanted_input.extend(
             expand(
                 "results/kallisto/{sample}-{unit}/pseudoalignment.bam",
+                unit=units[["sample","unit"]].itertuples(),
 
             )
         )
