@@ -36,7 +36,7 @@ rule kallisto_genomebam:
         gtf="resources/genome.gtf",
         chrom="resources/chrom_edit.txt",
     output:
-        directory("results/kallisto/{sample}-{unit}"),
+        dir=directory("results/kallisto/{sample}-{unit}"),
         "results/kallisto/{sample}-{unit}/pseudoalignment.bam",
     log:
         "results/logs/kallisto/genomebam/{sample}-{unit}.log",
@@ -45,5 +45,5 @@ rule kallisto_genomebam:
     conda:
         "../envs/kallisto.yaml"
     shell:
-        "kallisto quant -i {input.idx} -o {output} "
+        "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
