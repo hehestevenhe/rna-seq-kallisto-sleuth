@@ -1,3 +1,5 @@
+ruleorder: kallisto_genomebame > kallisto_quant
+
 rule kallisto_index:
     input:
         "resources/transcriptome.cdna.fasta",
