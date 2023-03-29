@@ -1,4 +1,4 @@
-ruleorder: kallisto_genomebame > kallisto_quant
+ruleorder: kallisto_genomebam > kallisto_quant
 
 rule kallisto_index:
     input:
