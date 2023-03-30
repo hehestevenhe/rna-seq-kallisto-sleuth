@@ -97,6 +97,22 @@ def get_trimmed(wildcards):
     # single end sample
     return expand("results/trimmed/{sample}-{unit}.fastq.gz", **wildcards)
 
+def get_trimmed_star(wildcards):
+    if not is_single_end(**wildcards):
+        # paired-end sample
+        return dict(
+            zip(
+                ["fq1","fq2"],
+                expand(
+                    "results/trimmed/{sample}-{unit}.{group}.fastq.gz",
+                    group=[1, 2],
+                    **wildcards,
+                )
+            )
+        )
+    # single end sample
+    return {"fq1": "results/trimmed/{sample}_{unit}.fastq.gz".format(**wildcards)}
+    
 
 def get_bioc_species_name():
     first_letter = config["resources"]["ref"]["species"][0]
