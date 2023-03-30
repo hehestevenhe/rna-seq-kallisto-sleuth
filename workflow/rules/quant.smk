@@ -1,3 +1,11 @@
+def genomebam(wildcards):
+    activated = config["genomebam"]["activate"]
+    if (activated == lower("true")):
+        input = "resources/chrom_edit.txt"
+    else:
+        input = "dummy.txt"
+    return input
+        
 ruleorder: kallisto_genomebam > kallisto_quant
 
 rule kallisto_index:
@@ -34,7 +42,7 @@ rule kallisto_genomebam:
         fq=get_trimmed,
         idx="results/kallisto/transcripts.idx",
         gtf="resources/genome.gtf",
-        chrom="resources/chrom_edit.txt",
+        chrom=input,
     output:
         dir=directory("results/kallisto/{sample}-{unit}"),
         bam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
