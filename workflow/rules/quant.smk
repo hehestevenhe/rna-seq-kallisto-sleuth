@@ -52,7 +52,7 @@ rule kallisto_genomebam:
         
 rule star_align:
     input:
-        unpack(get_trimmed),  ### THIS WILL NEED SOME EXTRA WORK; NOT SURE IF MATCHES DESIRED INPUT FORMAT
+        unpack(get_trimmed_star),  
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
@@ -65,6 +65,27 @@ rule star_align:
             "resources/genome.gtf", config["params"]["star"]
         ),
     threads: 24
+    resources: 
+        tmpdir="./"
     wrapper:
         "v1.21.4/bio/star/align"
+        
+rule star_bam_naming
+    input:
+        file="results/star/{sample}-{unit}/ReadsPerGene.out.bam",
+    output:
+        bam="results/star/indexed/{sample}-{unit}.bam",
+    shell:
+        "mv {input.file} results/star/indexed/{sample}-{unit}.bam"
+        
+rule star_bam_indexing
+    input: 
+        "results/star/indexed/{sample}-{unit}.bam",
+    output:
+        bai="results/star/indexed/{sample}-{unit}.bam.bai",
+    log: 
+        "logs/star/{sample}-{unit}-indexing.log",
+    wrapper:
+        "v1.25.0/bio/samtools/index"
+        
         
