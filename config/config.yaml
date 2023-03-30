@@ -28,6 +28,10 @@ genomebam:
   # hg version for downloading chromosome size data. Should match the build specified above under ref:
   hg_ver: hg38
 
+star:
+  # Activates STAR genome alignment to produce .bam files aligned to the genome instead of transcriptome
+  activate: true
+
 pca:
   labels:
     # columns of sample sheet to use for PCA
@@ -135,3 +139,5 @@ params:
   cutadapt-pe: 
     adapters: "-a ACGGATCGATCGATCGATCGAT -g GGATCGATCGATCGATCGAT -A ACGGATCGATCGATCGATCGAT -G GGATCGATCGATCGATCGAT"
     extra: "--minimum-length 33 -e 0.005 --overlap 7"
+  star:""
+  # Pass any additional arguments to the STAR alignment 
