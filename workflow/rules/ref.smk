@@ -170,6 +170,8 @@ rule star_index:
         extra="--sjdbGTFfile resources/genome.gtf --sjdbOverhang 100",
     log:
         "logs/star_index_genome.log",
+    resources: 
+        tmpdir="./"
     cache: True
     wrapper:
         "v1.21.4/bio/star/index"
