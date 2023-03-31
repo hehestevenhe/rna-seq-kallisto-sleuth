@@ -1,10 +1,10 @@
 def genomebam_inputs(wildcards):
     activated = config["genomebam"]["activate"]
-    if (activated == ("true","True","TRUE")):
-        input = "resources/chrom_edit.txt"
-    else:
-        input = "dummy.txt"
-    return input
+    if activated == "true":
+        rule_input = "resources/chrom_edit.txt"
+    elif activated !="true":
+        rule_input = "dummy.txt"
+    return rule_input
         
 ruleorder: kallisto_genomebam > kallisto_quant
 
