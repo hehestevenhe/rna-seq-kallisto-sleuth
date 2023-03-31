@@ -57,3 +57,42 @@ rule kallisto_genomebam:
     shell:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
+
+rule star_align:
+    input:
+        unpack(get_trimmed_star),  
+        index="resources/star_genome",
+    output:
+        aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
+        reads_per_gene="results/star/{sample}-{unit}/ReadsPerGene.out.tab",
+    log:
+        "logs/star/{sample}-{unit}.log",
+    params:
+        idx=lambda wc, input: input.index,
+        extra="--outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --sjdbGTFfile {} {}".format(
+            "resources/genome.gtf", config["params"]["star"]
+        ),
+    threads: 24
+    resources: 
+        tmpdir="./"
+    wrapper:
+        "v1.21.4/bio/star/align"
+        
+rule star_bam_naming:
+    input:
+        file="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
+    output:
+        bam="results/star/indexed/{sample}-{unit}.bam",
+    shell:
+        "mv {input.file} results/star/indexed/{wildcards.sample}-{wildcards.unit}.bam"
+        
+rule star_bam_indexing:
+    input: 
+        "results/star/indexed/{sample}-{unit}.bam",
+    output:
+        bai="results/star/indexed/{sample}-{unit}.bam.bai",
+    log: 
+        "logs/star/{sample}-{unit}-indexing.log",
+    wrapper:
+        "v1.25.0/bio/samtools/index"
+        
