@@ -70,15 +70,15 @@ rule star_align:
     wrapper:
         "v1.21.4/bio/star/align"
         
-rule star_bam_naming
+rule star_bam_naming:
     input:
-        file="results/star/{sample}-{unit}/ReadsPerGene.out.bam",
+        file="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
     output:
         bam="results/star/indexed/{sample}-{unit}.bam",
     shell:
-        "mv {input.file} results/star/indexed/{sample}-{unit}.bam"
+        "mv {input.file} results/star/indexed/{wildcards.sample}-{wildcards.unit}.bam"
         
-rule star_bam_indexing
+rule star_bam_indexing:
     input: 
         "results/star/indexed/{sample}-{unit}.bam",
     output:
