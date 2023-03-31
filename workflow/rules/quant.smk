@@ -1,6 +1,6 @@
 def genomebam_inputs(wildcards):
     activated = config["genomebam"]["activate"]
-    if activated == True
+    if activated == True:
         rule_input = "resources/chrom_edit.txt"
     elif activated == False:
         rule_input = "dummy.txt"
