@@ -21,6 +21,12 @@ resources:
   ontology:
     # gene ontology to download, used e.g. in goatools
     gene_ontology: "http://current.geneontology.org/ontology/go-basic.obo"
+    
+genomebam: 
+  # Produce .bam and .bam.bai files from the kallisto pseudoalignments
+  activate: true
+  # hg version for downloading chromosome size data. Should match the build specified above under ref:
+  hg_ver: hg38
 
 pca:
   labels:

@@ -288,4 +288,14 @@ def all_input(wildcards):
             )
         )
 
+    if config["genomebam"]["activate"]:
+        # kallisto genomebam
+        wanted_input.extend(
+            expand(
+                "results/kallisto/{unit.sample}-{unit.unit}/pseudoalignments.bam",
+                unit=units[["sample","unit"]].itertuples(),
+
+            )
+        )
+        
     return wanted_input

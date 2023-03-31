@@ -124,3 +124,24 @@ rule get_spia_db:
     cache: True
     script:
         "../scripts/get-spia-db.R"
+
+rule get_chrom_size:
+    output:
+        "resources/chrom.txt",
+    params:
+        ver=config["genomebam"]["hg_ver"],
+    log:
+        "logs/chrom_size.log",
+    shell:
+        "curl -o resources/chrom.txt https://hgdownload.cse.ucsc.edu/goldenPath/{params.ver}/bigZips/{params.ver}.chrom.sizes 2> {log}"
+
+rule chrom_edit:
+    input:
+        "resources/chrom.txt",
+    output:
+        "resources/chrom_edit.txt",
+    log:
+        "logs/chrom_edit.log",
+    shell:
+        "sed 's/chr//' {input} > resources/chrom_edit.txt 2> {log}"
+
