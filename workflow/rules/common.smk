@@ -313,7 +313,7 @@ def all_input(wildcards):
 
             )
         )
-        
+
     if config["star"]["activate"]:
         # star genome alignment
         wanted_input.extend(

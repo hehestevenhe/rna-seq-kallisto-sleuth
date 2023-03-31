@@ -1,3 +1,11 @@
+def genomebam_inputs(wildcards):
+    activated = config["genomebam"]["activate"]
+    if activated == True:
+        rule_input = "resources/chrom_edit.txt"
+    elif activated == False:
+        rule_input = "dummy.txt"
+    return rule_input
+        
 ruleorder: kallisto_genomebam > kallisto_quant
 
 rule kallisto_index:
@@ -34,7 +42,7 @@ rule kallisto_genomebam:
         fq=get_trimmed,
         idx="results/kallisto/transcripts.idx",
         gtf="resources/genome.gtf",
-        chrom="resources/chrom_edit.txt",
+        chrom=genomebam_inputs,
     output:
         dir=directory("results/kallisto/{sample}-{unit}"),
         bam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
@@ -49,7 +57,7 @@ rule kallisto_genomebam:
     shell:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
-        
+
 rule star_align:
     input:
         unpack(get_trimmed_star),  
@@ -87,5 +95,4 @@ rule star_bam_indexing:
         "logs/star/{sample}-{unit}-indexing.log",
     wrapper:
         "v1.25.0/bio/samtools/index"
-        
         
