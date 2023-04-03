@@ -64,7 +64,7 @@ shell(
     " --readFilesIn {input_str}"
     " {readcmd}"
     " {extra}"
-    " --outTmpDir {tmpdir}"
+    " --outTmpDir {tmpdir}/star_temp"
     " --outFileNamePrefix ./"
     " --outStd {stdout}"
     " > {snakemake.output.aln}"
