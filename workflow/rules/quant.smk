@@ -68,6 +68,7 @@ rule star_tempdir:
 rule star_align:
     input:
         unpack(get_trimmed_star),  
+        tmp="star_temp",
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
@@ -81,7 +82,7 @@ rule star_align:
         ),
     threads: 24
     resources: 
-        tmpdir="."
+        tmpdir="star_temp"
     wrapper:
         "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_tmpdirs/workflow/wrapper"
         
