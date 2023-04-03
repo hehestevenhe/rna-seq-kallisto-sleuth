@@ -57,7 +57,7 @@ else:
 
 
 with:
-    tmpdir = snakemake.resources.get("tmpdir")
+    tmpdir = snakemake.resources.tmpdir
     shell(
         "STAR "
         " --runThreadN {snakemake.threads}"
