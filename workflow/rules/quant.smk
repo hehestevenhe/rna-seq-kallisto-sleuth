@@ -80,7 +80,7 @@ rule star_align:
         extra="--outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --sjdbGTFfile {} {}".format(
             "resources/genome.gtf", config["params"]["star"]
         ),
-    threads: 24
+    threads: 12
     resources: 
         tmpdir="star_temp"
     wrapper:
