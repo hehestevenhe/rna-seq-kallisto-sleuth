@@ -57,10 +57,17 @@ rule kallisto_genomebam:
     shell:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
-
+        
+rule star_tempdir:
+    output: temp("star_temp/temp.txt"),
+    shell:
+        "mkdir(star_temp)"
+        "touch temp.txt"
+        
 rule star_align:
     input:
         unpack(get_trimmed_star),  
+        dummy="star_temp/temp.txt",
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
@@ -74,7 +81,7 @@ rule star_align:
         ),
     threads: 24
     resources: 
-        tmpdir="./"
+        tmpdir="./star_temp"
     wrapper:
         "v1.21.4/bio/star/align"
         
