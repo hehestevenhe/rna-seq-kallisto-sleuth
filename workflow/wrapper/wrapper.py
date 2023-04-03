@@ -63,7 +63,7 @@ def permissions():
    #Checks whether Queue is empty and runs
    while q.empty():
       time.sleep(10)
-      shell("sudo find ./{tmpdir} -type d -exec chmod 775 {} \;")
+      shell("sudo chmod -R 755 {tmpdir}")
 
 if __name__ == "__main__":
    #Queue is a data structure used to communicate between process 
@@ -74,7 +74,6 @@ if __name__ == "__main__":
    p.start()
    while True:
     shell(
-    "sudo env PATH=$PATH " 
     "STAR "
     " --runThreadN {snakemake.threads}"
     " --genomeDir {index}"
