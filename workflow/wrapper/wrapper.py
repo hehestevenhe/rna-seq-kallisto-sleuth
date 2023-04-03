@@ -7,6 +7,7 @@ __license__ = "MIT"
 import os
 import tempfile
 from snakemake.shell import shell
+from multiprocessing import Process,Queue
 
 
 extra = snakemake.params.get("extra", "")
@@ -57,12 +58,25 @@ else:
     
 tmpdir=snakemake.resources.tmpdir
 
-shell("sudo bash -c 'echo $PATH'")
-shell("sudo -i bash -c 'echo $PATH'")
-shell("sudo -E bash -c 'echo $PATH'")
-shell("sudo env PATH=$PATH bash -c 'echo $PATH'")
+from multiprocessing import Process,Queue
+import random
+import time
 
-shell(
+def permissions():
+   #Checks whether Queue is empty and runs
+   while q.empty():
+      time.sleep(10)
+      shell("sudo find {tmpdir} -type d -exec chmod 775 {} \;")
+
+if __name__ == "__main__":
+   #Queue is a data structure used to communicate between process 
+   q = Queue()
+   #creating the process
+   p = Process(target=permissions)
+   #starting the process
+   p.start()
+   while True:
+    shell(
     "sudo env PATH=$PATH " 
     "STAR "
     " --runThreadN {snakemake.threads}"
@@ -76,7 +90,10 @@ shell(
     " > {snakemake.output.aln}"
     " {log}"
     )
-
+    print("STAR alignment completed")
+    q.put("stop")
+    break
+   
 if snakemake.output.get("reads_per_gene"):
     shell("cat {tmpdir}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
 if snakemake.output.get("chim_junc"):
