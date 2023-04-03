@@ -60,7 +60,7 @@ tmpdir=snakemake.resources.tmpdir
 shell("echo $PATH")
 
 shell(
-    "sudo -E " 
+    "sudo " 
     "STAR "
     " --runThreadN {snakemake.threads}"
     " --genomeDir {index}"
