@@ -4,3 +4,4 @@ channels:
   - nodefaults
 dependencies:
   - star =2.7.10b
+  - python =3.10.9
