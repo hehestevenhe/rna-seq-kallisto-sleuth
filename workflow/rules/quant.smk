@@ -62,8 +62,8 @@ rule star_tempdir:
     output: 
         temp(directory("star_temp")),
     shell:
-        "mkdir(star_temp)"
-        "touch temp.txt"
+        "mkdir star_temp"
+        
         
 rule star_align:
     input:
