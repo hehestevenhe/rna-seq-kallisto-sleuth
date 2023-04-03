@@ -57,7 +57,7 @@ else:
     
 tmpdir=snakemake.resources.tmpdir
 
-shell("echo $PATH")
+shell("sudo bash -c 'echo $PATH'")
 
 shell(
     "sudo " 
