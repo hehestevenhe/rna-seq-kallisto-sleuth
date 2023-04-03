@@ -54,33 +54,32 @@ elif "BAM Unsorted" in extra:
     stdout = "BAM_Unsorted"
 else:
     stdout = "SAM"
+    
+tmpdir=snakemake.resources.tmpdir
 
-
-with tempfile.TemporaryDirectory() as tmpdir:
-    shell(
-        "umask 0022 && "
-        "STAR "
-        " --runThreadN {snakemake.threads}"
-        " --genomeDir {index}"
-        " --readFilesIn {input_str}"
-        " {readcmd}"
-        " {extra}"
-        " --outTmpDir {tmpdir}/STARtmp"
-        " --outFileNamePrefix {tmpdir}/"
-        " --outStd {stdout}"
-        " > {snakemake.output.aln}"
-        " {log}"
+shell(
+    "STAR "
+    " --runThreadN {snakemake.threads}"
+    " --genomeDir {index}"
+    " --readFilesIn {input_str}"
+    " {readcmd}"
+    " {extra}"
+    " --outTmpDir {tmpdir}"
+    " --outFileNamePrefix {tmpdir}/"
+    " --outStd {stdout}"
+    " > {snakemake.output.aln}"
+    " {log}"
     )
 
-    if snakemake.output.get("reads_per_gene"):
-        shell("cat {tmpdir}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
-    if snakemake.output.get("chim_junc"):
-        shell("cat {tmpdir}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
-    if snakemake.output.get("sj"):
-        shell("cat {tmpdir}/SJ.out.tab > {snakemake.output.sj:q}")
-    if snakemake.output.get("log"):
-        shell("cat {tmpdir}/Log.out > {snakemake.output.log:q}")
-    if snakemake.output.get("log_progress"):
-        shell("cat {tmpdir}/Log.progress.out > {snakemake.output.log_progress:q}")
-    if snakemake.output.get("log_final"):
-        shell("cat {tmpdir}/Log.final.out > {snakemake.output.log_final:q}")
+if snakemake.output.get("reads_per_gene"):
+    shell("cat {tmpdir}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
+if snakemake.output.get("chim_junc"):
+    shell("cat {tmpdir}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
+if snakemake.output.get("sj"):
+    shell("cat {tmpdir}/SJ.out.tab > {snakemake.output.sj:q}")
+if snakemake.output.get("log"):
+    shell("cat {tmpdir}/Log.out > {snakemake.output.log:q}")
+if snakemake.output.get("log_progress"):
+    shell("cat {tmpdir}/Log.progress.out > {snakemake.output.log_progress:q}")
+if snakemake.output.get("log_final"):
+    shell("cat {tmpdir}/Log.final.out > {snakemake.output.log_final:q}")
