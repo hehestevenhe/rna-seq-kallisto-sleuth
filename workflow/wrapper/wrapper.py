@@ -58,7 +58,8 @@ else:
 tmpdir=snakemake.resources.tmpdir
 
 shell(
-    "sudo STAR "
+    "sudo -E env 'PATH=$PATH' " 
+    "STAR "
     " --runThreadN {snakemake.threads}"
     " --genomeDir {index}"
     " --readFilesIn {input_str}"
