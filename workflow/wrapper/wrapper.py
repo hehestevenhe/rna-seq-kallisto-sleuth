@@ -58,6 +58,8 @@ else:
 tmpdir=snakemake.resources.tmpdir
 
 shell("sudo bash -c 'echo $PATH'")
+shell("sudo -i bash -c 'echo $PATH'")
+shell("sudo -E bash -c 'echo $PATH'")
 
 shell(
     "sudo " 
