@@ -64,7 +64,6 @@ shell(
     " --readFilesIn {input_str}"
     " {readcmd}"
     " {extra}"
-    " --outTmpDir {tmpdir}"
     " --outFileNamePrefix {tmpdir}/"
     " --outStd {stdout}"
     " > {snakemake.output.aln}"
