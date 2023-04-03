@@ -68,7 +68,7 @@ rule star_tempdir:
 rule star_align:
     input:
         unpack(get_trimmed_star),  
-        dummy=directory("star_temp"), 
+        dummy="star_temp", 
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
