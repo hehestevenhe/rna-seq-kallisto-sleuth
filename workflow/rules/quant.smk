@@ -59,7 +59,8 @@ rule kallisto_genomebam:
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
         
 rule star_tempdir:
-    output: temp("star_temp/temp.txt"),
+    output: 
+        temp(directory("star_temp")),
     shell:
         "mkdir(star_temp)"
         "touch temp.txt"
@@ -67,7 +68,7 @@ rule star_tempdir:
 rule star_align:
     input:
         unpack(get_trimmed_star),  
-        dummy="star_temp/temp.txt",
+        dummy=directory("star_temp"),
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
