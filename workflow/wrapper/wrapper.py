@@ -58,7 +58,7 @@ else:
 
 with tempfile.TemporaryDirectory() as tmpdir:
     shell(
-        "umask 0022"
+        "umask 0022 && "
         "STAR "
         " --runThreadN {snakemake.threads}"
         " --genomeDir {index}"
