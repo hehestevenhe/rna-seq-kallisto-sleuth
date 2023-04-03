@@ -84,7 +84,7 @@ rule star_align:
     resources: 
         tmpdir="./star_temp"
     wrapper:
-        "v1.21.4/bio/star/align"
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_tmpdirs/workflow/wrapper"
         
 rule star_bam_naming:
     input:
