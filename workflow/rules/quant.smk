@@ -82,7 +82,7 @@ rule star_align:
         ),
     threads: 24
     resources: 
-        tmpdir="./"
+        tmpdir="."
     wrapper:
         "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_tmpdirs/workflow/wrapper"
         
