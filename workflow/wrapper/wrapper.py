@@ -56,7 +56,8 @@ else:
     stdout = "SAM"
 
 
-with "star_temp" as tmpdir:
+with:
+    tmpdir = snakemake.resources.get("tmpdir")
     shell(
         "STAR "
         " --runThreadN {snakemake.threads}"
