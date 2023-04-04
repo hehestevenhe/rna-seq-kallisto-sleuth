@@ -90,6 +90,7 @@ with tempfile.TemporaryDirectory() as star_tmp:
             )
             print("STAR alignment completed")
             q.put("stop")
+            time.sleep(10)
             break
    
     if snakemake.output.get("reads_per_gene"):
