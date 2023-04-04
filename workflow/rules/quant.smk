@@ -72,11 +72,11 @@ rule star_align:
         extra="--outSAMtype BAM SortedByCoordinate --quantMode GeneCounts --sjdbGTFfile {} {}".format(
             "resources/genome.gtf", config["params"]["star"]
         ),
-    threads: 11
+    threads: 12
     resources: 
         tmpdir="./"
     wrapper:
-        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_tmpdirs/workflow/wrapper"
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_streamline/workflow/wrapper"
         
 rule star_bam_naming:
     input:
