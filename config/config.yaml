@@ -139,5 +139,5 @@ params:
   cutadapt-pe: 
     adapters: "-a ACGGATCGATCGATCGATCGAT -g GGATCGATCGATCGATCGAT -A ACGGATCGATCGATCGATCGAT -G GGATCGATCGATCGATCGAT"
     extra: "--minimum-length 33 -e 0.005 --overlap 7"
-  star:""
+  star: ""
   # Pass any additional arguments to the STAR alignment 
