@@ -58,17 +58,9 @@ rule kallisto_genomebam:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
         
-rule star_tempdir:
-    output: 
-        temp(directory("star_temp")),
-    shell:
-        "mkdir star_temp"
-        
-        
 rule star_align:
     input:
         unpack(get_trimmed_star),  
-        tmp="star_temp",
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
@@ -82,9 +74,9 @@ rule star_align:
         ),
     threads: 12
     resources: 
-        tmpdir="star_temp"
+        tmpdir="./"
     wrapper:
-        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_tmpdirs/workflow/wrapper"
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_streamline/workflow/wrapper"
         
 rule star_bam_naming:
     input:

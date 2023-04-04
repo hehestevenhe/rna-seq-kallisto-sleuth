@@ -59,46 +59,49 @@ else:
     
 tmpdir=snakemake.resources.tmpdir
 
-def permissions():
-   #Checks whether Queue is empty and runs
-   while q.empty():
-      time.sleep(10)
-      shell("sudo chmod -R 755 {tmpdir}")
+with tempfile.TemporaryDirectory() as star_tmp:
 
-if __name__ == "__main__":
-   #Queue is a data structure used to communicate between process 
-   q = Queue()
-   #creating the process
-   p = Process(target=permissions)
-   #starting the process
-   p.start()
-   while True:
-    shell(
-    "STAR "
-    " --runThreadN {snakemake.threads}"
-    " --genomeDir {index}"
-    " --readFilesIn {input_str}"
-    " {readcmd}"
-    " {extra}"
-    " --outTmpDir {tmpdir}/STARtmp"
-    " --outFileNamePrefix {tmpdir}/"
-    " --outStd {stdout}"
-    " > {snakemake.output.aln}"
-    " {log}"
-    )
-    print("STAR alignment completed")
-    q.put("stop")
-    break
+    def permissions():
+    #Checks whether Queue is empty and runs
+        while q.empty():
+            time.sleep(10)
+            shell("sudo chmod -R 750 {tmpdir}/{star_tmp}")
+
+    if __name__ == "__main__":
+    #Queue is a data structure used to communicate between process 
+        q = Queue()
+        #creating the process
+        p = Process(target=permissions)
+        #starting the process
+        p.start()
+        while True:
+            shell(
+            "STAR "
+            " --runThreadN {snakemake.threads}"
+            " --genomeDir {index}"
+            " --readFilesIn {input_str}"
+            " {readcmd}"
+            " {extra}"
+            " --outTmpDir {tmpdir}/{star_tmp}/STARtmp"
+            " --outFileNamePrefix {tmpdir}/{star_tmp}/"
+            " --outStd {stdout}"
+            " > {snakemake.output.aln}"
+            " {log}"
+            )
+            print("STAR alignment completed")
+            q.put("stop")
+            time.sleep(10)
+            break
    
-if snakemake.output.get("reads_per_gene"):
-    shell("cat {tmpdir}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
-if snakemake.output.get("chim_junc"):
-    shell("cat {tmpdir}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
-if snakemake.output.get("sj"):
-    shell("cat {tmpdir}/SJ.out.tab > {snakemake.output.sj:q}")
-if snakemake.output.get("log"):
-    shell("cat {tmpdir}/Log.out > {snakemake.output.log:q}")
-if snakemake.output.get("log_progress"):
-    shell("cat {tmpdir}/Log.progress.out > {snakemake.output.log_progress:q}")
-if snakemake.output.get("log_final"):
-    shell("cat {tmpdir}/Log.final.out > {snakemake.output.log_final:q}")
+    if snakemake.output.get("reads_per_gene"):
+        shell("cat {tmpdir}/{star_tmp}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
+    if snakemake.output.get("chim_junc"):
+        shell("cat {tmpdir}/{star_tmp}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
+    if snakemake.output.get("sj"):
+        shell("cat {tmpdir}/{star_tmp}/SJ.out.tab > {snakemake.output.sj:q}")
+    if snakemake.output.get("log"):
+        shell("cat {tmpdir}/{star_tmp}/Log.out > {snakemake.output.log:q}")
+    if snakemake.output.get("log_progress"):
+        shell("cat {tmpdir}/{star_tmp}/Log.progress.out > {snakemake.output.log_progress:q}")
+    if snakemake.output.get("log_final"):
+        shell("cat {tmpdir}/{star_tmp}/Log.final.out > {snakemake.output.log_final:q}")
