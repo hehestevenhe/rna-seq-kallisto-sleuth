@@ -61,7 +61,6 @@ rule kallisto_genomebam:
 rule star_align:
     input:
         unpack(get_trimmed_star),  
-        tmp="star_temp",
         index="resources/star_genome",
     output:
         aln="results/star/{sample}-{unit}/Aligned.sortedByCoord.out.bam",
