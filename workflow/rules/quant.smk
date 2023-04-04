@@ -76,7 +76,7 @@ rule star_align:
     resources: 
         tmpdir="./"
     wrapper:
-        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/kallisto_star_streamline/workflow/wrapper"
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/main/workflow/wrapper"
         
 rule star_bam_naming:
     input:
@@ -95,4 +95,4 @@ rule star_bam_indexing:
         "logs/star/{sample}-{unit}-indexing.log",
     wrapper:
         "v1.25.0/bio/samtools/index"
-        
+
