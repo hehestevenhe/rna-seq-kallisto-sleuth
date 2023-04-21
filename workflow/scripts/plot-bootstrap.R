@@ -5,6 +5,8 @@ sink(log, type="message")
 library("tidyverse")
 library("sleuth")
 
+print("testing 1 2 3")
+
 so <- sleuth_load(snakemake@input[["so"]])
 
 top_n <- -strtoi(snakemake@params["top_n"])
@@ -30,21 +32,20 @@ for (i in nrow(top_transcripts)) {
 if ( !is.null(snakemake@params[["genes"]]) ) {
   genes <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
     distinct(ext_gene)
-} else {
-  # "genes" is null, if the list provided in config.yaml is empty
-  genes <- tibble( ext_gene = character() )
-}
+  
+      for (gene in genes){
+        transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
+          filter(ext_gene == gene) %>%                                   # otherwise not visualised due to the drop_na()
+          drop_na() %>%
+          pull(target_id)
 
-for (gene in genes){
-    transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
-        filter(ext_gene == gene) %>%                                   # otherwise not visualised due to the drop_na()
-        drop_na() %>%
-        pull(target_id)
+            if ( length( transcripts > 0 ) ) {
+                  for (transcript in transcripts) {
+                    plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
+                    ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+      }
+    }  
+  }
+}  
 
-    if ( length( transcripts > 0 ) ) {
-        for (transcript in transcripts) {
-            plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
-            ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
-        }
-    }
-}
+
