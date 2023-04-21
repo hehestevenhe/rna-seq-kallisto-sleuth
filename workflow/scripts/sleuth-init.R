@@ -78,6 +78,20 @@ if(!length(custom_transcripts) == 0) {
     so$target_mapping <- so$target_mapping %>%
                         # add those custom transcripts as rows to the target mapping
                         add_row(ens_gene = NA, ext_gene = "Custom", target_id = custom_transcripts, canonical = NA)
+    #Extra code below; EDIT SO THAT PARAMS TO DETERMINE CUSTOM suffix
+    invisible(lapply(1:nrow(data),
+    function(i){
+          if (str_detect(data[i,"target_id"], 'premrna') == TRUE)
+     		{
+       		try({  
+         	transcript_id <<- str_extract(data[i,"target_id"], ".*(?=:premrna)")
+                matched_trans_row <<- which(data$target_id == transcript_id, arr.ind = TRUE)
+                data[i,c("ens_gene", "ext_gene", "gene_desc")] <<- 
+           		data[matched_trans_row,c("ens_gene", "ext_gene", "gene_desc")]},
+       		outFile = print(paste0("error-logs/Errorlog ",i,"_",transcript_id,".txt")))      
+     		}
+  	       }
+	     ))
 }
 
 if(!is.null(model[["full"]])) {
