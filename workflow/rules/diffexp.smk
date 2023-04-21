@@ -33,6 +33,7 @@ rule sleuth_init:
         species=get_bioc_species_name(),
         model=get_model,
         exclude=config["diffexp"].get("exclude", None),
+        suffix=config["diffexp"]["suffix"],
     conda:
         "../envs/sleuth.yaml"
     log:
