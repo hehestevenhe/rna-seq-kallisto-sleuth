@@ -5,7 +5,7 @@ sink(log, type="message")
 library("tidyverse")
 library("sleuth")
 
-print(paste0("Genes of interest:\n", snakemake@params[["genes"]]))
+print(snakemake@params[["genes"]])
 
 so <- sleuth_load(snakemake@input[["so"]])
 
@@ -19,14 +19,28 @@ dir.create( snakemake@output[[1]] )
 top_transcripts <- results %>%    
     filter(qval <= snakemake@params[["fdr"]]) %>%        
     top_n(top_n,qval) %>%
-    select(., c("ext_gene","target_id")) %>%
+    pull(target_id)) %>%
     drop_na()
 
-for (i in 1:nrow(top_transcripts)) {
-    plot_bootstrap(so, top_transcripts[i,"target_id"], color_by = snakemake@params[["color_by"]], units = "tpm")
-    transcript_save <- str_replace_all(top_transcript[i, "target_id"], ":", "_")
-    ggsave(file = str_c(snakemake@output[[1]], "/", top_transcript[i,"ext_gene"], ".", transcript_save, ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+for (transcript in top_transcripts){
+    top_gene <- results[,!(names(results) %in% "canonical")]  %>% 
+    filter(target_id == transcript) %>%  
+    drop_na() %>%
+    pull(ext_gene)
+    
+    if (length(top_gene > 0 )) {
+        for (gene in top_gene){
+            plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
+            ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+            }
+        }
     }
+            
+#for (i in 1:nrow(top_transcripts)) {
+#    plot_bootstrap(so, top_transcripts[i,"target_id"], color_by = snakemake@params[["color_by"]], units = "tpm")
+#    transcript_save <- str_replace_all(top_transcript[i, "target_id"], ":", "_")
+#    ggsave(file = str_c(snakemake@output[[1]], "/", top_transcript[i,"ext_gene"], ".", transcript_save, ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+#    }
 
 # Create plots for genes of interest
 if ( !is.null(snakemake@params[["genes"]]) ) {
