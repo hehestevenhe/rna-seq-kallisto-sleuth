@@ -46,6 +46,10 @@ scatter:
 diffexp:
   # samples to exclude (e.g. outliers due to technical problems)
   exclude:
+  # Set a single suffix to be used; set to "dummy" if no suffix used. Avoid special characters were possible to mitigate downstream errors.
+  # This is intended for compatibility with indexes generated with TRAWLING where custom transcripts are used
+  # containing the suffix ":premrna" to each entry
+  suffix: "dummy" 
   # model for sleuth differential expression analysis
   models:
     model_X:
