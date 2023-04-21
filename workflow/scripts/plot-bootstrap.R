@@ -16,7 +16,7 @@ results <- read_tsv(snakemake@input[["transcripts"]])
 dir.create( snakemake@output[[1]] )
 
 # Create plots for top n transcripts
-top_transcripts <- results[,!(names(results) %in% "canonical")]    
+top_transcripts <- results[,!(names(results) %in% "canonical")] %>%   
     filter(qval <= snakemake@params[["fdr"]]) %>%        
     top_n(top_n,qval) %>%
     drop_na() %>%
