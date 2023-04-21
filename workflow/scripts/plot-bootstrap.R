@@ -5,7 +5,7 @@ sink(log, type="message")
 library("tidyverse")
 library("sleuth")
 
-print(snakemake@params[["genes"]])
+print(paste0("Genes of interest:\n", snakemake@params[["genes"]]))
 
 so <- sleuth_load(snakemake@input[["so"]])
 
@@ -22,7 +22,7 @@ top_transcripts <- results %>%
     select(., c("ext_gene","target_id")) %>%
     drop_na()
 
-for (i in nrow(top_transcripts)) {
+for (i in 1:nrow(top_transcripts)) {
     plot_bootstrap(so, top_transcripts[i,"target_id"], color_by = snakemake@params[["color_by"]], units = "tpm")
     transcript_save <- str_replace_all(top_transcript[i, "target_id"], ":", "_")
     ggsave(file = str_c(snakemake@output[[1]], "/", top_transcript[i,"ext_gene"], ".", transcript_save, ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
