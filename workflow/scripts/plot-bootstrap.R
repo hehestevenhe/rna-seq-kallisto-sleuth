@@ -19,7 +19,7 @@ dir.create( snakemake@output[[1]] )
 top_transcripts <- results %>%    
     filter(qval <= snakemake@params[["fdr"]]) %>%        
     top_n(top_n,qval) %>%
-    pull(target_id)) %>%
+    pull(target_id) %>%
     drop_na()
 
 for (transcript in top_transcripts){
