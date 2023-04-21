@@ -5,7 +5,7 @@ sink(log, type="message")
 library("tidyverse")
 library("sleuth")
 
-print("testing 1 2 3")
+print(snakemake@params[["genes"]])
 
 so <- sleuth_load(snakemake@input[["so"]])
 
