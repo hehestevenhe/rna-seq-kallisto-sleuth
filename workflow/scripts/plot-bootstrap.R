@@ -29,23 +29,23 @@ for (i in nrow(top_transcripts)) {
     }
 
 # Create plots for genes of interest
-if ( !is.null(snakemake@params[["genes"]]) ) {
-  genes <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
-    distinct(ext_gene)
+#if ( !is.null(snakemake@params[["genes"]]) ) {
+#  genes <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
+#  distinct(ext_gene)
   
-      for (gene in genes){
-        transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
-          filter(ext_gene == gene) %>%                                   # otherwise not visualised due to the drop_na()
-          drop_na() %>%
-          pull(target_id)
+#    for (gene in genes){
+#    transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
+#      filter(ext_gene == gene) %>%                                     # otherwise not visualised due to the drop_na()
+#      drop_na() %>%
+#      pull(target_id)
 
-            if ( length( transcripts > 0 ) ) {
-                  for (transcript in transcripts) {
-                    plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
-                    ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
-      }
-    }  
-  }
-}  
+#        if ( length( transcripts > 0 ) ) {
+#              for (transcript in transcripts) {
+#                plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
+#                ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+#      }
+#    }  
+#  }
+#}  
 
 
