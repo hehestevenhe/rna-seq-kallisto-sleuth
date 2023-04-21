@@ -11,38 +11,40 @@ top_n <- -strtoi(snakemake@params["top_n"])
 
 results <- read_tsv(snakemake@input[["transcripts"]])
 
-top_genes <- results %>%
-    filter(qval <= snakemake@params[["fdr"]]) %>%
-    top_n(top_n, qval) %>%
-    dplyr::select(ext_gene) %>%
-    drop_na() %>%
-    distinct(ext_gene)
+dir.create( snakemake@output[[1]] )
 
+# Create plots for top n transcripts
+top_transcripts <- results %>%    
+    filter(qval <= snakemake@params[["fdr"]]) %>%        
+    top_n(top_n,qval) %>%
+    select(., c("ext_gene","target_id"))
+    drop_na()
 
+for (i in nrow(top_transcripts)) {
+    plot_bootstrap(so, top_transcripts[i,"target_id"], color_by = snakemake@params[["color_by"]], units = "tpm")
+    transcript_save <- str_replace_all(top_transcript[i, "target_id"], ":", "_")
+    ggsave(file = str_c(snakemake@output[[1]], "/", top_transcript[i,"ext_gene"], ".", transcript_save, ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+    }
+
+# Create plots for genes of interest
 if ( !is.null(snakemake@params[["genes"]]) ) {
-  genes_of_interest <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
+  genes <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
     distinct(ext_gene)
 } else {
   # "genes" is null, if the list provided in config.yaml is empty
-  genes_of_interest <- tibble( ext_gene = character() )
+  genes <- tibble( ext_gene = character() )
 }
 
-genes <- full_join(top_genes, genes_of_interest, by = 'ext_gene') %>%
-    add_row(ext_gene = "Custom") %>%
-    pull(ext_gene)
-
-dir.create( snakemake@output[[1]] )
-
-for (gene in genes) {
-    transcripts <- results %>%
-        filter(ext_gene == gene) %>%
+for (gene in genes){
+    transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
+        filter(ext_gene == gene) %>%                                   # otherwise not visualised due to the drop_na()
         drop_na() %>%
         pull(target_id)
 
     if ( length( transcripts > 0 ) ) {
         for (transcript in transcripts) {
             plot_bootstrap(so, transcript, color_by = snakemake@params[["color_by"]], units = "tpm")
-            ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", transcript, ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
+            ggsave(file = str_c(snakemake@output[[1]], "/", gene, ".", str_replace_all(transcript, ":", "_"), ".", snakemake@wildcards[["model"]] , ".bootstrap.pdf"))
         }
     }
 }
