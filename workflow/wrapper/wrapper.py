@@ -57,8 +57,6 @@ elif "BAM Unsorted" in extra:
 else:
     stdout = "SAM"
     
-tmpdir=snakemake.resources.tmpdir
-
 with tempfile.TemporaryDirectory() as star_tmp:
     shell(
     "STAR "
@@ -68,8 +66,8 @@ with tempfile.TemporaryDirectory() as star_tmp:
     " --readFilesIn {input_str}"
     " {readcmd}"
     " {extra}"
-    " --outTmpDir {tmpdir}/{star_tmp}/STARtmp"
-    " --outFileNamePrefix {tmpdir}/{star_tmp}/"
+    " --outTmpDir {star_tmp}/STARtmp"
+    " --outFileNamePrefix {star_tmp}/"
     " --outStd {stdout}"
     " > {snakemake.output.aln}"
     " {log}"
