@@ -308,7 +308,7 @@ def all_input(wildcards):
         # kallisto genomebam
         wanted_input.extend(
             expand(
-                "results/kallisto/{unit.sample}-{unit.unit}/pseudoalignments.bam",
+                "results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam.bai",
                 unit=units[["sample","unit"]].itertuples(),
 
             )
