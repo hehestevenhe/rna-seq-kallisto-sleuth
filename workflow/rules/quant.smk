@@ -62,15 +62,15 @@ rule kallisto_genomebam_naming:
     input:
         file="results/kallisto/{sample}-{unit}/pseudoalignments.bam"
     output:
-        bam="results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam"
+        bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam"
     shell:
-        "mv {input.file} results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam"
+        "mv {input.file} results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam"
         
 rule kallisto_genomebam_indexing:
     input:
-        "results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam"
+        "results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam"
     output:
-        bai="results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam.bai",
+        bai="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam.bai",
     log: 
         "logs/kallisto/{sample}-{unit}-genomebam-indexing.log",
     wrapper:
