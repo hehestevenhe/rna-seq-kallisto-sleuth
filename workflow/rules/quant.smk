@@ -57,6 +57,24 @@ rule kallisto_genomebam:
     shell:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
+ 
+rule kallisto_genomebam_naming:
+    input:
+        file="results/kallisto/{sample}-{unit}/pseudoalignments.bam
+    output:
+        bam="results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam
+    shell:
+        "mv {input.file} results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam"
+        
+rule kallisto_genomebam_indexing
+    input:
+        "results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam
+    output:
+        bai="results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam.bai",
+    log: 
+        "logs/kallisto/{sample}-{unit}-genomebam-indexing.log",
+    wrapper:
+        "v1.25.0/bio/samtools/index"
         
 rule star_align:
     input:
