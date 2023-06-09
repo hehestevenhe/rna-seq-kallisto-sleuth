@@ -60,15 +60,15 @@ rule kallisto_genomebam:
  
 rule kallisto_genomebam_naming:
     input:
-        file="results/kallisto/{sample}-{unit}/pseudoalignments.bam"
+        file="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
     output:
-        bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam"
+        bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
     shell:
         "mv {input.file} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam"
         
 rule kallisto_genomebam_indexing:
     input:
-        "results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam"
+        "results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
     output:
         bai="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam.bai",
     log: 
