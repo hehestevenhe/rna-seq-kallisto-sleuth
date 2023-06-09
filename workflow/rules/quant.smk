@@ -66,7 +66,7 @@ rule kallisto_genomebam_naming:
     shell:
         "mv {input.file} results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam"
         
-rule kallisto_genomebam_indexing
+rule kallisto_genomebam_indexing:
     input:
         "results/kallisto/{sample}-{unit}/{sample}-{unit}_pseudoalignments.bam
     output:
