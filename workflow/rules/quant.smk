@@ -46,6 +46,7 @@ rule kallisto_genomebam:
     output:
         dir=directory("results/kallisto/{sample}-{unit}"),
         bam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
+        bai="results/kallisto/{sample}-{unit}/pseudoalignments.bam.bai",
     log:
         "results/logs/kallisto/genomebam/{sample}-{unit}.log",
     params:
@@ -60,21 +61,14 @@ rule kallisto_genomebam:
  
 rule kallisto_genomebam_naming:
     input:
-        file="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
+        ibam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
+        ibai="results/kallisto/{sample}-{unit}/pseudoalignments.bam.bai",
     output:
         bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
-    shell:
-        "mv {input.file} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam"
-        
-rule kallisto_genomebam_indexing:
-    input:
-        "results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
-    output:
         bai="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam.bai",
-    log: 
-        "logs/kallisto/{sample}-{unit}-genomebam-indexing.log",
-    wrapper:
-        "v1.25.0/bio/samtools/index"
+    shell:
+        "mv {input.ibam} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam"
+        "mv {input.ibai} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam.bai"
         
 rule star_align:
     input:
