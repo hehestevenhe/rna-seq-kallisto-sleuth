@@ -67,9 +67,10 @@ rule kallisto_genomebam_naming:
         bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
         bai="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam.bai",
     shell:
-        "mv {input.ibam} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam"
-        "mv {input.ibai} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam.bai"
-        
+        """
+        mv {input.ibam} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam
+        mv {input.ibai} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam.bai
+        """
 rule star_align:
     input:
         unpack(get_trimmed_star),  
