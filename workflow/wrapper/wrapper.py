@@ -75,14 +75,14 @@ with tempfile.TemporaryDirectory() as star_tmp:
     print("STAR alignment completed")
    
     if snakemake.output.get("reads_per_gene"):
-        shell("cat {tmpdir}/{star_tmp}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
+        shell("cat {star_tmp}/ReadsPerGene.out.tab > {snakemake.output.reads_per_gene:q}")
     if snakemake.output.get("chim_junc"):
-        shell("cat {tmpdir}/{star_tmp}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
+        shell("cat {star_tmp}/Chimeric.out.junction > {snakemake.output.chim_junc:q}")
     if snakemake.output.get("sj"):
-        shell("cat {tmpdir}/{star_tmp}/SJ.out.tab > {snakemake.output.sj:q}")
+        shell("cat {star_tmp}/SJ.out.tab > {snakemake.output.sj:q}")
     if snakemake.output.get("log"):
-        shell("cat {tmpdir}/{star_tmp}/Log.out > {snakemake.output.log:q}")
+        shell("cat {star_tmp}/Log.out > {snakemake.output.log:q}")
     if snakemake.output.get("log_progress"):
-        shell("cat {tmpdir}/{star_tmp}/Log.progress.out > {snakemake.output.log_progress:q}")
+        shell("cat {star_tmp}/Log.progress.out > {snakemake.output.log_progress:q}")
     if snakemake.output.get("log_final"):
-        shell("cat {tmpdir}/{star_tmp}/Log.final.out > {snakemake.output.log_final:q}")
+        shell("cat {star_tmp}/Log.final.out > {snakemake.output.log_final:q}")
