@@ -46,13 +46,14 @@ for (transcript in top_transcripts){
 if ( !is.null(snakemake@params[["genes"]]) ) {
   genes <- tibble( ext_gene = snakemake@params[["genes"]]) %>%
   distinct(ext_gene)
-  
+genes <- genes[['ext_gene']]   #Convert tibble to atomic vector
+    
     for (gene in genes){
-    transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
-      filter(ext_gene == gene)                                         # otherwise not visualised due to the drop_na()
-    transcripts["ens_gene"][is.na(transcripts["ens_gene"])] <- "Custom"    #Adds 'Custom' gene identifier for custom added genes that have none; would otherwise produce error
-    transcripts <- drop_na(transcripts) %>%
-      pull(target_id)
+        print(gene)
+        transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
+        filter(ext_gene == gene) %>%                                       # otherwise not visualised due to the drop_na()
+        drop_na() %>%
+        pull(target_id)
 
         if ( length( transcripts > 0 ) ) {
               for (transcript in transcripts) {
