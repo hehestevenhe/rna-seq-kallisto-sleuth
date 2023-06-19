@@ -77,7 +77,7 @@ custom_transcripts <- so$obs_raw %>%
 if(!length(custom_transcripts) == 0) {
     so$target_mapping <- so$target_mapping %>%
                         # add those custom transcripts as rows to the target mapping
-                        add_row(ens_gene = NA, ext_gene = "Custom", target_id = custom_transcripts, canonical = NA)
+                        add_row(ens_gene = "Custom", ext_gene = "Custom", target_id = custom_transcripts, canonical = NA)
 
 ### Extra code below for TRAWLING support; added params so any custom suffix can be specified
   invisible(lapply(1:nrow(so$target_mapping),
