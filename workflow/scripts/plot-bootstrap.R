@@ -49,8 +49,9 @@ if ( !is.null(snakemake@params[["genes"]]) ) {
   
     for (gene in genes){
     transcripts <- results[,!(names(results) %in% "canonical")]  %>%   # Removes the canonical column, non-canonical transcripts are
-      filter(ext_gene == gene) %>%                                     # otherwise not visualised due to the drop_na()
-      drop_na() %>%
+      filter(ext_gene == gene)                                         # otherwise not visualised due to the drop_na()
+    transcripts["ens_gene"][is.na(transcripts["ens_gene"])] <- "Custom"    #Adds 'Custom' gene identifier for custom added genes that have none; would otherwise produce error
+    transcripts <- drop_na(transcripts) %>%
       pull(target_id)
 
         if ( length( transcripts > 0 ) ) {
