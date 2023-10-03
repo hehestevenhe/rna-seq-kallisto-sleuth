@@ -89,7 +89,7 @@ rule star_align:
     resources: 
         tmpdir="./"
     wrapper:                        ### MAKE SURE TO UPDATE THIS WITH SUCCESSIVE URL CHANGES
-        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/STAR-rule-update/workflow/wrapper"
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/main/workflow/wrapper"
         
 rule star_bam_naming:
     input:
