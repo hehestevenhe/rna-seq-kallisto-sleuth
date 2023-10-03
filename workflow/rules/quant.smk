@@ -46,6 +46,7 @@ rule kallisto_genomebam:
     output:
         dir=directory("results/kallisto/{sample}-{unit}"),
         bam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
+        bai="results/kallisto/{sample}-{unit}/pseudoalignments.bam.bai",
     log:
         "results/logs/kallisto/genomebam/{sample}-{unit}.log",
     params:
@@ -57,7 +58,19 @@ rule kallisto_genomebam:
     shell:
         "kallisto quant -i {input.idx} -o {output.dir} "
         "{params.extra} --genomebam --gtf {input.gtf} --chromosomes {input.chrom} {input.fq} 2> {log}"
-        
+ 
+rule kallisto_genomebam_naming:
+    input:
+        ibam="results/kallisto/{sample}-{unit}/pseudoalignments.bam",
+        ibai="results/kallisto/{sample}-{unit}/pseudoalignments.bam.bai",
+    output:
+        bam="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam",
+        bai="results/kallisto/bam_indexed/{sample}-{unit}_pseudoalignments.bam.bai",
+    shell:
+        """
+        mv {input.ibam} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam
+        mv {input.ibai} results/kallisto/bam_indexed/{wildcards.sample}-{wildcards.unit}_pseudoalignments.bam.bai
+        """
 rule star_align:
     input:
         unpack(get_trimmed_star),  
@@ -75,8 +88,8 @@ rule star_align:
     threads: 12
     resources: 
         tmpdir="./"
-    wrapper:
-        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/main/workflow/wrapper"
+    wrapper:                        ### MAKE SURE TO UPDATE THIS WITH SUCCESSIVE URL CHANGES
+        "https://github.com/hehestevenhe/rna-seq-kallisto-sleuth/raw/STAR-rule-update/workflow/wrapper"
         
 rule star_bam_naming:
     input:
