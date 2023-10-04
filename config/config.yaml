@@ -46,6 +46,10 @@ scatter:
 diffexp:
   # samples to exclude (e.g. outliers due to technical problems)
   exclude:
+  # Set a single suffix to be used; set to "dummy" if no suffix used. Avoid special characters were possible to mitigate downstream errors.
+  # This is intended for compatibility with indexes generated with TRAWLING where custom transcripts are used
+  # containing the suffix ":premrna" to each entry
+  suffix: "dummy" 
   # model for sleuth differential expression analysis
   models:
     model_X:
@@ -103,10 +107,10 @@ bootstrap_plots:
   # maximum number of bootstrap plots to generate, i.e. top n discoveries to plot
   top_n: 20
   color_by: condition
-  # for now, this will plot the sleuth-normalised kallisto count estimations with kallisto
-  # for all the transcripts of the respective genes
+  # this will plot the sleuth-normalised kallisto count estimations with kallisto for all transcripts
+  # of the genes listed here, provided they do not have missing values, and regardless of whether they are significant or not
   genes_of_interest:
-    - A4galt
+    - Your_gene_here
 
 plot_vars:
   # significance level used for plot_vars() plots

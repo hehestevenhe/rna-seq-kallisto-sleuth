@@ -77,7 +77,23 @@ custom_transcripts <- so$obs_raw %>%
 if(!length(custom_transcripts) == 0) {
     so$target_mapping <- so$target_mapping %>%
                         # add those custom transcripts as rows to the target mapping
-                        add_row(ens_gene = NA, ext_gene = "Custom", target_id = custom_transcripts, canonical = NA)
+                        add_row(ens_gene = "Custom", ext_gene = "Custom", gene_desc = "custom sequence", target_id = custom_transcripts, canonical = NA)
+
+### Extra code below for TRAWLING support; added params so any custom suffix can be specified
+  invisible(lapply(1:nrow(so$target_mapping),
+     function(i){
+       if (str_detect(so$target_mapping[i,"target_id"], snakemake@params[["suffix"]]) == TRUE)
+       {
+         try({  
+           transcript_id <<- str_extract(so$target_mapping[i,"target_id"], paste0(".*(?=", snakemake@params[["suffix"]],")"))
+           matched_trans_row <<- which(so$target_mapping$target_id == transcript_id, arr.ind = TRUE)
+           so$target_mapping[i,c("ens_gene", "ext_gene", "gene_desc")] <<- 
+             so$target_mapping[matched_trans_row,c("ens_gene", "ext_gene", "gene_desc")] } ,
+           outFile = print(paste0("logs/sleuth-init-error-log ",i,"_",transcript_id,".txt")))      
+       }
+     }
+  ))
+### Extra code ends here
 }
 
 if(!is.null(model[["full"]])) {
