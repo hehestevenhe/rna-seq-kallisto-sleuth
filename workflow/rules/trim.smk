@@ -19,8 +19,8 @@ rule cutadapt:
     input:
         get_fastqs,
     output:
-        fastq="results/trimmed/{sample}-{unit}.fastq.gz",
-        qc="results/trimmed/{sample}-{unit}.qc.txt",
+        temp("results/trimmed/{sample}-{unit}.fastq.gz"),
+        "results/trimmed/{sample}-{unit}.qc.txt",
     threads: 8
     params:
         adapters=config["params"]["cutadapt-se"]["adapters"],
